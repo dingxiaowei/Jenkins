@@ -11,6 +11,12 @@ pipeline
     
     options{
     	disableConcurrentBuilds()
+        timestamps()
+        //timeout(activity:true,time:5,uint:'SECONDS')
+    }
+
+    environment{
+        foo = 'today is Friday'
     }
     
     stages{
@@ -20,13 +26,31 @@ pipeline
                 sh label:'',script:"echo build,echo ${params.bool}"
                 sh label:'',script:"echo build,echo ${params.chs}"
                 sh label:'',script:"echo build,echo ${params.tex}"
+                sleep(time:20,uint:'SECONDS')
             }
         }
         stage('发布'){
+            environment{
+                bar = 'merry chrismas'
+            }
         	steps{
             	sh label:'',script:'echo deploy'
+                sh label:'',script:'echo ${foo}'
+                sh label:'',script:'echo ${bar}'
             }
+        }
+        stage('测试'){
+            environment{
+                bar = 'merry chrismas'
+            }
+            steps{
+                script{
+                    print(bar)
+                }
+            }
+        }
     }
+
     post{
     	always{
         	sh label:'',script:'echo always'
