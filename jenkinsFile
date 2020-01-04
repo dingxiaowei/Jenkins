@@ -1,0 +1,44 @@
+pipeline
+{
+	agent any
+    parameters{
+    	string(name:'str', defaultValue:'DEFAULT',description:'这是一个描述',trim:true)
+        booleanParam(name:'bool',defaultValue:false,description:'这是一个布尔参数')
+        //choice(name:'chs',choice:['ios','andriod','ps4'],description:'这是一个选项参数')
+        choice(name:'chs',choices:'ios\nps4\nandroid',description:'这是一个选项参数')
+        text(name:'tex',defaultValue:'文本参数默认值',description:'这是一个文本参数的描述')
+    }
+    
+    options{
+    	disableConcurrentBuilds()
+    }
+    
+    stages{
+    	stage('打包'){
+        	steps{
+            	sh label:'',script:"echo build,echo ${params.str}"
+                sh label:'',script:"echo build,echo ${params.bool}"
+                sh label:'',script:"echo build,echo ${params.chs}"
+                sh label:'',script:"echo build,echo ${params.tex}"
+            }
+        }
+        stage('发布'){
+        	steps{
+            	sh label:'',script:'echo deploy'
+            }
+    }
+    post{
+    	always{
+        	sh label:'',script:'echo always'
+        }
+        success{
+        	sh label:'',script:'echo success'
+        }
+        failure{
+        	sh label:'',script:'echo failure'
+        }
+        aborted{
+        	sh label:'',script:'echo aborted'
+        }
+    }
+}
